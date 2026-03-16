@@ -34,5 +34,5 @@ jobs:
           # Thay 'your-docker-username' bằng tên thật hoặc dùng biến
           # Tags sẽ bao gồm bản 'latest' và mã hash của commit (sha) để dễ quản lý
           tags: |
-            ${{ secrets.DOCKER_TDT }}/springsecurity:latest
-            ${{ secrets.DOCKER_TDT }}/springsecurity:${{ github.sha }}
+            ${{ secrets.DOCKER_TDT }}/projectdockerjava:latest
+            ${{ secrets.DOCKER_TDT }}/projectdockerjava:${{ github.sha }}
