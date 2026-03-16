@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trần Đình Thuận - Portfolio (Manga Comic)</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@300;400;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      /* Manga palette (dịu, thiên trắng-đen + 1 màu nhấn) */
+      --bg: #f4f5f7;
+      --paper: #ffffff;
+      --ink: #0b1220;
+      --muted: #475569;
+
+      --accent: #2f4bd6;      /* xanh nhấn dịu */
+      --accent-2: #0f766e;    /* teal nhấn phụ */
+      --tone: rgba(11,18,32,.08);
+
+      --outline: #0b1220;
+      --shadow: rgba(11,18,32,.16);
+      --shadow-strong: rgba(11,18,32,.26);
+
+      --radius: 16px;
+      --radius-sm: 12px;
+
+      --maxw: 920px;
+    }
+
+    *{ box-sizing: border-box; }
+    html,body{ height:100%; }
+
+    body{
+      margin:0;
+      color: var(--ink);
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      line-height:1.65;
+      background:
+        /* Speedlines nhẹ kiểu manga */
+        repeating-linear-gradient(135deg,
+          rgba(11,18,32,.035) 0px,
+          rgba(11,18,32,.035) 6px,
+          transparent 6px,
+          transparent 18px),
+        /* Screentone dots nhẹ */
+        radial-gradient(rgba(11,18,32,.07) 1px, transparent 1px),
+        var(--bg);
+      background-size: auto, 18px 18px, auto;
+      background-position: 0 0, 2px 3px, 0 0;
+    }
+
+    .container{
+      max-width: var(--maxw);
+      margin: 40px auto;
+      padding: 18px;
+    }
+
+    /* ===== Header (title manga bubble) ===== */
+    header{
+      display:flex;
+      justify-content:center;
+      margin-bottom: 22px;
+    }
+
+    .manga-title{
+      position: relative;
+      padding: 14px 22px;
+      background: var(--paper);
+      border: 3px solid var(--outline);
+      border-radius: 999px;
+      box-shadow: 10px 10px 0 var(--shadow-strong);
+      transform: rotate(-1deg);
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+
+    .manga-title:hover{
+      transform: rotate(0deg) translateY(-2px);
+      box-shadow: 14px 14px 0 var(--shadow-strong);
+    }
+
+    .manga-title h1{
+      margin: 0;
+      font-family: Bangers, "Comic Neue", cursive;
+      letter-spacing: 1px;
+      font-size: clamp(2.2rem, 4vw, 3.0rem);
+      color: var(--accent);
+      text-shadow: 1px 1px 0 rgba(11,18,32,.10);
+    }
+
+    /* ===== Cards as manga panels ===== */
+    .section-card{
+      position: relative;
+      background: var(--paper);
+      border: 3px solid var(--outline);
+      border-radius: var(--radius);
+      padding: 26px 22px;
+      margin-bottom: 18px;
+      box-shadow: 12px 12px 0 var(--shadow);
+      overflow:hidden;
+
+      opacity: 0;
+      transform: translateY(12px);
+      transition:
+        opacity .45s ease,
+        transform .45s cubic-bezier(.2,.8,.2,1),
+        box-shadow .2s ease;
+    }
+
+    .section-card.is-visible{
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .section-card:hover{
+      box-shadow: 16px 16px 0 var(--shadow-strong);
+      transform: translateY(-2px);
+    }
+
+    /* Screentone layer inside panel (manga feel, nhẹ) */
+    .section-card::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(rgba(11,18,32,.06) 1px, transparent 1px);
+      background-size: 16px 16px;
+      opacity:.55;
+      pointer-events:none;
+      mix-blend-mode: multiply;
+    }
+
+    /* Corner burst sticker */
+    .section-card::after{
+      content:"";
+      position:absolute;
+      top:-30px;
+      right:-30px;
+      width: 110px;
+      height: 110px;
+      background:
+        conic-gradient(from 20deg,
+          rgba(47,75,214,.12),
+          rgba(47,75,214,0) 30%,
+          rgba(15,118,110,.10),
+          rgba(15,118,110,0) 60%,
+          rgba(47,75,214,.12));
+      border: 3px solid var(--outline);
+      border-radius: 24px;
+      transform: rotate(18deg);
+      box-shadow: 8px 8px 0 rgba(11,18,32,.12);
+      pointer-events:none;
+    }
+
+    /* ===== Section headings with icon ===== */
+    .section-head{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      margin: 0 0 16px;
+      padding-bottom: 10px;
+      border-bottom: 2px dashed rgba(11,18,32,.30);
+      position: relative;
+    }
+
+    .section-head h2{
+      margin:0;
+      font-family: "Comic Neue", Inter, sans-serif;
+      font-weight: 900;
+      font-size: 1.5rem;
+      letter-spacing: .2px;
+    }
+
+    .hicon{
+      width: 34px;
+      height: 34px;
+      display:inline-grid;
+      place-items:center;
+      border-radius: 12px;
+      border: 2px solid var(--outline);
+      background: rgba(47,75,214,.10);
+      box-shadow: 6px 6px 0 rgba(11,18,32,.12);
+      transition: transform .16s ease, box-shadow .16s ease, background-color .16s ease;
+      flex: 0 0 auto;
+    }
+    .section-card:hover .hicon{
+      transform: rotate(-2deg) translateY(-1px);
+      box-shadow: 8px 8px 0 rgba(11,18,32,.15);
+      background: rgba(15,118,110,.10);
+    }
+    .hicon svg{ width: 18px; height: 18px; }
+
+    /* ===== Info list with per-item icons ===== */
+    ul.info-list{
+      list-style:none;
+      padding:0;
+      margin:0;
+      display:flex;
+      flex-direction: column;
+      gap: 10px;
+      position:relative;
+    }
+
+    .info-item{
+      position: relative;
+      display:grid;
+      grid-template-columns: 34px 160px 1fr;
+      gap: 12px;
+      align-items: center;
+
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      border: 2px solid transparent;
+
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.78), rgba(255,255,255,.62));
+      transition:
+        transform .18s ease,
+        box-shadow .18s ease,
+        border-color .18s ease,
+        background-color .18s ease;
+    }
+
+    .info-item:hover{
+      transform: translateX(8px);
+      border-color: rgba(11,18,32,.18);
+      box-shadow: 10px 10px 0 rgba(11,18,32,.12);
+      background: rgba(47,75,214,.06);
+    }
+
+    .iicon{
+      width: 34px;
+      height: 34px;
+      display:inline-grid;
+      place-items:center;
+      border-radius: 12px;
+      border: 2px solid var(--outline);
+      background: rgba(11,18,32,.03);
+      box-shadow: 6px 6px 0 rgba(11,18,32,.10);
+      transition: transform .16s ease, background-color .16s ease;
+    }
+    .info-item:hover .iicon{
+      transform: rotate(-2deg) scale(1.02);
+      background: rgba(180,83,9,.10);
+    }
+    .iicon svg{ width: 18px; height: 18px; }
+
+    .label{
+      font-family: "Comic Neue", Inter, sans-serif;
+      font-weight: 900;
+      color: var(--accent-2);
+    }
+
+    .value{
+      font-weight: 700;
+      color: var(--ink);
+      word-break: break-word;
+    }
+
+    /* ===== Skills ===== */
+    .skills-lead{
+      margin: 0 0 12px;
+      color: var(--muted);
+      font-family: "Comic Neue", Inter, sans-serif;
+      font-weight: 700;
+    }
+
+    .skills-container{
+      display:flex;
+      flex-wrap:wrap;
+      gap: 10px;
+    }
+
+    .skill-tag{
+      position:relative;
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+
+      padding: 9px 14px;
+      border-radius: 999px;
+
+      background: rgba(47,75,214,.08);
+      border: 2px solid var(--outline);
+      box-shadow: 6px 6px 0 rgba(11,18,32,.12);
+
+      font-family: "Comic Neue", Inter, sans-serif;
+      font-weight: 900;
+
+      transition: transform .16s ease, box-shadow .16s ease, background-color .16s ease;
+      user-select:none;
+      cursor: default;
+    }
+
+    .skill-tag::before{
+      content:"";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(15,118,110,.55);
+      box-shadow: 10px -4px 0 rgba(47,75,214,.55);
+      opacity: .75;
+    }
+
+    .skill-tag:hover{
+      transform: translateY(-3px) rotate(-1deg);
+      background: rgba(15,118,110,.10);
+      box-shadow: 10px 10px 0 rgba(11,18,32,.15);
+    }
+
+    .skill-tag:active{
+      transform: translateY(-1px) scale(.99);
+      box-shadow: 6px 6px 0 rgba(11,18,32,.12);
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 680px){
+      .info-item{
+        grid-template-columns: 34px 1fr;
+        grid-template-areas:
+          "icon label"
+          "icon value";
+        align-items: start;
+      }
+      .info-item .iicon{ grid-area: icon; }
+      .info-item .label{ grid-area: label; }
+      .info-item .value{ grid-area: value; }
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      *{ transition:none !important; animation:none !important; }
+      .section-card{ opacity:1; transform:none; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <div class="manga-title">
+        <h1>Thông tin cá nhân</h1>
+      </div>
+    </header>
+
+    <!-- ===== VỀ BẢN THÂN ===== -->
+    <div class="section-card reveal">
+      <div class="section-head">
+        <span class="hicon" aria-hidden="true" title="Hồ sơ">
+          <!-- user icon -->
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M12 12c2.761 0 5-2.239 5-5S14.761 2 12 2 7 4.239 7 7s2.239 5 5 5Z" stroke="currentColor" stroke-width="2"/>
+            <path d="M4 22c1.6-4 5-6 8-6s6.4 2 8 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <h2>Về Bản Thân</h2>
+      </div>
+
+      <ul class="info-list">
+        <li class="info-item">
+          <span class="iicon" aria-hidden="true" title="Họ tên">
+            <!-- id card -->
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M4 7a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V7Z" stroke="currentColor" stroke-width="2"/>
+              <path d="M8 10h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M8 14h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <strong class="label">Họ và tên:</strong>
+          <span class="value">Trần Đình Thuận</span>
+        </li>
+
+        <li class="info-item">
+          <span class="iicon" aria-hidden="true" title="Ngày sinh">
+            <!-- calendar -->
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M7 3v3M17 3v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M4 8h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M6 5h12a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="2"/>
+            </svg>
+          </span>
+          <strong class="label">Ngày sinh:</strong>
+          <span class="value">08/06/2004</span>
+        </li>
+
+        <li class="info-item">
+          <span class="iicon" aria-hidden="true" title="Trường">
+            <!-- graduation cap -->
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M12 3 2 8l10 5 10-5-10-5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              <path d="M6 10v6c2 2 10 2 12 0v-6" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <strong class="label">Trường:</strong>
+          <span class="value">Đại học Công Nghệ TP.HCM (HUTECH)</span>
+        </li>
+
+        <li class="info-item">
+          <span class="iicon" aria-hidden="true" title="Trạng thái">
+            <!-- badge -->
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M12 2l3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1 3-6Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <strong class="label">Trạng thái:</strong>
+          <span class="value">Sinh viên năm 4</span>
+        </li>
+
+        <li class="info-item">
+          <span class="iicon" aria-hidden="true" title="Chuyên ngành">
+            <!-- code brackets -->
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M9 18 3 12l6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M15 6 21 12l-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <strong class="label">Chuyên ngành:</strong>
+          <span class="value">Công nghệ phần mềm (CNTT)</span>
+        </li>
+
+        <li class="info-item">
+          <span class="iicon" aria-hidden="true" title="GPA">
+            <!-- chart -->
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M4 19V5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M4 19h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M8 16v-5M12 16v-8M16 16v-3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <strong class="label">Điểm GPA:</strong>
+          <span class="value">2.79</span>
+        </li>
+
+        <li class="info-item">
+          <span class="iicon" aria-hidden="true" title="Địa chỉ">
+            <!-- map pin -->
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M12 22s7-5.2 7-12a7 7 0 1 0-14 0c0 6.8 7 12 7 12Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              <path d="M12 10.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" stroke="currentColor" stroke-width="2"/>
+            </svg>
+          </span>
+          <strong class="label">Địa chỉ tạm trú:</strong>
+          <span class="value">70 Đường số 27, Linh Xuân, Thủ Đức, TP.HCM</span>
+        </li>
+
+        <li class="info-item">
+          <span class="iicon" aria-hidden="true" title="Điện thoại">
+            <!-- phone -->
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M7 2h10v20H7V2Z" stroke="currentColor" stroke-width="2"/>
+              <path d="M10 19h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <strong class="label">Điện thoại:</strong>
+          <span class="value">0384186602</span>
+        </li>
+
+        <li class="info-item">
+          <span class="iicon" aria-hidden="true" title="Email">
+            <!-- mail -->
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M4 6h16v12H4V6Z" stroke="currentColor" stroke-width="2"/>
+              <path d="m4 7 8 6 8-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <strong class="label">Email:</strong>
+          <span class="value">tdt0862004@gmail.com</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- ===== NGÔN NGỮ & CÔNG NGHỆ ===== -->
+    <div class="section-card reveal">
+      <div class="section-head">
+        <span class="hicon" aria-hidden="true" title="Công nghệ">
+          <!-- cpu -->
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M9 9h6v6H9V9Z" stroke="currentColor" stroke-width="2"/>
+            <path d="M7 4v3M12 4v3M17 4v3M7 17v3M12 17v3M17 17v3M4 7h3M4 12h3M4 17h3M17 7h3M17 12h3M17 17h3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <h2>Ngôn Ngữ &amp; Công Nghệ</h2>
+      </div>
+
+      <p class="skills-lead">
+        Dưới đây là các ngôn ngữ, công cụ và cơ sở dữ liệu tôi đã học và trải nghiệm qua:
+      </p>
+
+      <div class="skills-container">
+        <span class="skill-tag">C</span>
+        <span class="skill-tag">C#</span>
+        <span class="skill-tag">Java</span>
+        <span class="skill-tag">JavaScript</span>
+        <span class="skill-tag">PHP</span>
+        <span class="skill-tag">Flutter</span>
+        <span class="skill-tag">MySQL</span>
+        <span class="skill-tag">MongoDB</span>
+        <span class="skill-tag">Laragon</span>
+        <span class="skill-tag">GitHub</span>
+        <span class="skill-tag">GitLab</span>
+      </div>
+    </div>
+
+    <!-- ===== CHỨNG CHỈ & KỸ NĂNG MỀM ===== -->
+    <div class="section-card reveal">
+      <div class="section-head">
+        <span class="hicon" aria-hidden="true" title="Chứng chỉ">
+          <!-- certificate -->
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M7 3h10v12H7V3Z" stroke="currentColor" stroke-width="2"/>
+            <path d="M9 7h6M9 10h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M9 15v6l3-2 3 2v-6" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <h2>Chứng Chỉ &amp; Kỹ Năng Mềm</h2>
+      </div>
+
+      <ul class="info-list">
+        <li class="info-item">
+          <span class="iicon" aria-hidden="true" title="Ngoại ngữ">
+            <!-- globe -->
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z" stroke="currentColor" stroke-width="2"/>
+              <path d="M2 12h20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M12 2c3 3 3 17 0 20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M12 2c-3 3-3 17 0 20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <strong class="label">Ngoại ngữ:</strong>
+          <span class="value">Chứng chỉ Tiếng Anh B1</span>
+        </li>
+
+        <li class="info-item">
+          <span class="iicon" aria-hidden="true" title="Kỹ năng mềm">
+            <!-- users -->
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M16 11a4 4 0 1 0-8 0" stroke="currentColor" stroke-width="2"/>
+              <path d="M4 22c1.6-4 5-6 8-6s6.4 2 8 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M6.5 9.5a3 3 0 1 0-3-3" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity=".65"/>
+              <path d="M2 20c.8-2.2 2.2-3.6 4-4.4" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity=".65"/>
+            </svg>
+          </span>
+          <strong class="label">Kỹ năng mềm:</strong>
+          <span class="value">Chứng chỉ Làm việc nhóm</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    // Reveal on scroll (giữ hiệu ứng, không có chú thích dư thừa)
+    (function () {
+      const cards = document.querySelectorAll(".reveal");
+      const show = (el) => el.classList.add("is-visible");
+
+      if (!("IntersectionObserver" in window)) {
+        cards.forEach(show);
+        return;
+      }
+
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) show(entry.target);
+        });
+      }, { threshold: 0.15 });
+
+      cards.forEach((c) => io.observe(c));
+    })();
+  </script>
+</body>
+</html>
