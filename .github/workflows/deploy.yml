@@ -3,7 +3,7 @@ name: Deploy to Docker Hub
 # Kịch bản chạy khi có hành động push vào nhánh main
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "master" ]
 
 jobs:
   build-and-push:
