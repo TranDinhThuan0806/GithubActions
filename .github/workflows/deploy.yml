@@ -1,0 +1,39 @@
+name: Deploy to Docker Hub
+
+# Kịch bản chạy khi có hành động push vào nhánh main
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Bước 1: Checkout mã nguồn từ repository về máy ảo của GitHub
+      - name: Checkout code
+        uses: actions/checkout@v6.0.2
+
+      # Bước 2: Đăng nhập vào Docker Hub sử dụng Secrets
+      - name: Login to Docker Hub
+        uses: docker/login-action@v4.0.0 
+        with:
+          username: ${{ secrets.DOCKER_TDT }}
+          password: ${{ secrets.DOCKER_PASS }}
+
+      # Bước 3: Thiết lập Docker Buildx (hỗ trợ build nâng cao)
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4.0.0
+
+      # Bước 4: Build và Push Image
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          # Thay 'your-docker-username' bằng tên thật hoặc dùng biến
+          # Tags sẽ bao gồm bản 'latest' và mã hash của commit (sha) để dễ quản lý
+          tags: |
+            ${{ secrets.DOCKER_TDT }}/springsecurity:latest
+            ${{ secrets.DOCKER_TDT }}/springsecurity:${{ github.sha }}
