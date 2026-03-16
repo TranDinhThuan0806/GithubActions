@@ -30,7 +30,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: ./Dockerfile
+          file: ./trandinhthuan/Dockerfile
           push: true
           # Thay 'your-docker-username' bằng tên thật hoặc dùng biến
           # Tags sẽ bao gồm bản 'latest' và mã hash của commit (sha) để dễ quản lý
